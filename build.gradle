@@ -1,0 +1,59 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+description = 'A spring social repository for Mongodb'
+version = "1.0.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+    maven {url "http://maven.springframework.org/release"}
+}
+
+def springVersion = "3.1.1.RELEASE"
+def securityVersion = "3.1.0.RELEASE"
+def slf4jVersion = "1.6.1"
+def jettyVersion = "7.1.6.v20100715"
+
+dependencies {
+	// spring framework
+	compile("org.springframework:spring-context:${springVersion}") {
+		exclude group: "commons-logging", module: "commons-logging"
+	}
+
+	// spring security
+	compile("org.springframework.security:spring-security-config:${securityVersion}") {
+		exclude group: "commons-logging", module: "commons-logging"
+	}
+	compile("org.springframework.security:spring-security-web:${securityVersion}") {
+		exclude group: "commons-logging", module: "commons-logging"
+	}
+
+	compile "org.springframework.social:spring-social-core:1.0.2.RELEASE"
+
+	// logging
+	compile "org.slf4j:slf4j-api:${slf4jVersion}"
+	runtime "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
+		"org.slf4j:slf4j-log4j12:${slf4jVersion}",
+		"log4j:log4j:1.2.16"
+
+	// JSR 303 with Hibernate Validator
+	compile "javax.validation:validation-api:1.0.0.GA",
+		"org.hibernate:hibernate-validator:4.0.2.GA"
+			
+	// GCLIB, required for @Configuration usage
+	compile "cglib:cglib-nodep:2.2.2"
+
+	// mongodb
+	compile "org.springframework.data:spring-data-mongodb:1.0.1.RELEASE"
+	compile "org.mongodb:mongo-java-driver:2.7.3"
+
+	// unit testing
+	testCompile "junit:junit:4.10",
+		"org.mockito:mockito-all:1.9.0",
+		"org.springframework:spring-test:${springVersion}"
+}
+
+task createDirs(description: 'Creates the directory for the project.', group: 'Project') << {
+	sourceSets*.java.srcDirs*.each { it.mkdirs() }
+	sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
