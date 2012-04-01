@@ -39,7 +39,7 @@ import com.mongodb.WriteConcern;
  */
 @Configuration
 @ComponentScan(basePackages = "org.springframework.social.connect")
-@PropertySource("classpath:org/springframework/social/connect/mongo/application.properties")
+@PropertySource("classpath:META-INF/spring/application.properties")
 public class ApplicationConfig {
 	
 	@Autowired
