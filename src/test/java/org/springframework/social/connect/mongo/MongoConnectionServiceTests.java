@@ -24,9 +24,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.test.FakeConnection;
 import org.springframework.social.test.FakeConnectionFactory;
 import org.springframework.social.test.FakeProvider;
@@ -70,7 +72,8 @@ public class MongoConnectionServiceTests extends SpringTest {
 			create("joey", "twitter", "@joey_ramones", "joey r.", 1),
 			create("joey", "facebook", "joey.ramones", "joey r.", 1),
 			create("johnny", "facebook", "JohnnyRamones", "johnny r.", 1),
-			create("tommy", "twitter", "@joey_ramones", "joey r.", 1)
+			create("tommy", "twitter", "@joey_ramones", "joey r.", 1),
+			create("cj", "fake", "c-j", "cj", 1)
 				);
 
 		mongoOps.insert(cnns, MongoConnection.class);
@@ -126,6 +129,12 @@ public class MongoConnectionServiceTests extends SpringTest {
 	}
 	
 	@Test
+	public void shouldReturnNullIfTheConnectionIsNotFound() {
+		Connection<?> conn = service.getConnection("a", "b", "c");
+		assertNull(conn);
+	}
+	
+	@Test
 	public void shouldFindPrimaryConnection() {
 		Connection<?> conn = service.getPrimaryConnection("joey", "twitter");
 		assertNotNull("Connection not found", conn);
@@ -176,4 +185,38 @@ public class MongoConnectionServiceTests extends SpringTest {
 		assertEquals("user name", conn.getData().getDisplayName());
 	}
 	
+	@Test(expected = DuplicateKeyException.class)
+	public void shouldThrowExceptionIfDuplicatedValues() {
+		Connection<?> userConn = factory.createConnection("cj", "cj");
+		service.create("cj", userConn, 1);
+	}
+	
+	@Test
+	public void shouldUpdateTheConnection() {
+		//Connection<?> userConn = factory.createConnection("cj", "cj");
+		
+		Connection<?> conn = service.getConnection("joey", "twitter", "@JeffreyHyman");
+		assertEquals("joey r.", conn.getDisplayName());
+	
+		service.update("joey", conn);
+		
+		Connection<?> conn2 = service.getConnection("joey", "twitter", "@JeffreyHyman");
+		assertEquals("joey r.", conn2.getDisplayName());
+	}
+	
+	@Test
+	public void shouldRemoveTheConnection() {
+		service.remove("joey", new ConnectionKey("twitter", "@JeffreyHyman"));
+		
+		Connection<?> conn = service.getConnection("joey", "twitter", "@JeffreyHyman");
+		assertNull("Connection not removed", conn);
+	}
+	
+	@Test
+	public void shouldRemoveTheConnectionForAProvider() {
+		service.remove("joey", "twitter");
+		
+		List<Connection<?>> conn = service.getConnections("joey", "twitter");
+		assertEquals(0, conn.size());
+	}
 }

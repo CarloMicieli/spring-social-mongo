@@ -43,6 +43,8 @@ public class ConnectionConverter {
 	}
 	
 	public Connection<?> convert(MongoConnection cnn) {
+		if (cnn==null) return null;
+		
 		ConnectionData connectionData = fillConnectionData(cnn);
 		ConnectionFactory<?> connectionFactory = connectionFactoryLocator.getConnectionFactory(connectionData.getProviderId());
 		return connectionFactory.createConnection(connectionData);

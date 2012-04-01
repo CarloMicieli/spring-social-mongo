@@ -33,11 +33,16 @@ public class FakeConnectionFactory<A> extends ConnectionFactory<A> {
 
 	@Override
 	public Connection<A> createConnection(ConnectionData data) {
-		FakeConnection<A> conn = new FakeConnection<>(data);
-		return conn;
+		return createConnection(data.getProviderId(),
+				data.getProviderUserId(), 
+				data.getDisplayName());
 	}
 	
 	public Connection<A> createConnection(String providerUserId, String displayName) {
+		return createConnection(providerId, providerUserId, displayName);
+	}
+	
+	public Connection<A> createConnection(String providerId, String providerUserId, String displayName) {
 		ConnectionData data = new ConnectionData(providerId,
 				providerUserId, 
 				displayName,
@@ -45,6 +50,6 @@ public class FakeConnectionFactory<A> extends ConnectionFactory<A> {
 				String.format("http://image/%s", providerUserId),
 				"accessToken", 
 				"secret", "", 0L);
-		return createConnection(data);
+		return new FakeConnection<A>(data);
 	}
 }

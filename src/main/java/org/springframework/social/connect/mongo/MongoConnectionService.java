@@ -53,7 +53,9 @@ public class MongoConnectionService implements ConnectionService {
 		this.converter = converter;
 	}
 		
-	/* (non-Javadoc)
+	/**
+	 * Returns the max connection rank for the user and the provider.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#getMaxRank(java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -69,7 +71,9 @@ public class MongoConnectionService implements ConnectionService {
 		return cnn.getRank() + 1;
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Create a new connection for the user.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#create(java.lang.String, org.springframework.social.connect.Connection, int)
 	 */
 	@Override
@@ -80,7 +84,9 @@ public class MongoConnectionService implements ConnectionService {
 		mongoTemplate.insert(mongoCnn);
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Update a connection.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#update(java.lang.String, org.springframework.social.connect.Connection)
 	 */
 	@Override
@@ -90,28 +96,37 @@ public class MongoConnectionService implements ConnectionService {
 		mongoTemplate.save(mongoCnn);
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Remove a connection.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#remove(java.lang.String, org.springframework.social.connect.ConnectionKey)
 	 */
 	@Override
 	public void remove(String userId, ConnectionKey connectionKey) {
 		//delete where userId = ? and providerId = ? and providerUserId = ?
-		mongoTemplate.remove(query(where("userId").is(userId)
+		Query q = query(where("userId").is(userId)
 				.and("providerId").is(connectionKey.getProviderId())
-				.and("providerUserId").is(connectionKey.getProviderUserId())));		
+				.and("providerUserId").is(connectionKey.getProviderUserId()));
+		mongoTemplate.remove(q, MongoConnection.class);		
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Remove all the connections for a user on a provider.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#remove(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void remove(String userId, String providerId) {
 		// delete where userId = ? and providerId = ?
-		mongoTemplate.remove(query(where("userId").is(userId)
-				.and("providerId").is(providerId)));
+		Query q = query(where("userId").is(userId)
+				.and("providerId").is(providerId));
+				
+		mongoTemplate.remove(q, MongoConnection.class);
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Return the primary connection.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#getPrimaryConnection(java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -125,7 +140,9 @@ public class MongoConnectionService implements ConnectionService {
 		return converter.convert(mc);
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Get the connection for user, provider and provider user id.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#getConnection(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -139,7 +156,9 @@ public class MongoConnectionService implements ConnectionService {
 		return converter.convert(mc);
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Get all the connections for an user id.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#getConnections(java.lang.String)
 	 */
 	@Override
@@ -151,7 +170,9 @@ public class MongoConnectionService implements ConnectionService {
 		return runQuery(q);
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Get all the connections for an user id on a provider.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#getConnections(java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -163,7 +184,9 @@ public class MongoConnectionService implements ConnectionService {
 		return runQuery(q);
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Get all the connections for an user.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#getConnections(java.lang.String, org.springframework.util.MultiValueMap)
 	 */
 	@Override
@@ -192,7 +215,9 @@ public class MongoConnectionService implements ConnectionService {
 		return runQuery(q);
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Get the user ids on the provider.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#getUserIds(java.lang.String, java.util.Set)
 	 */
 	@Override
@@ -211,7 +236,9 @@ public class MongoConnectionService implements ConnectionService {
 		return userIds;
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Get the user ids on the provider with a given provider user id.
+	 * 
 	 * @see org.springframework.social.connect.mongo.ConnectionService#getUserIds(java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -229,6 +256,8 @@ public class MongoConnectionService implements ConnectionService {
 		
 		return userIds;
 	}
+	
+	// helper methods
 	
 	private List<Connection<?>> runQuery(Query query) {
 		List<MongoConnection> results = mongoTemplate.find(query, MongoConnection.class);
