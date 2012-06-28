@@ -38,7 +38,7 @@ import com.mongodb.WriteConcern;
  * @author Carlo P. Micieli
  */
 @Configuration
-@ComponentScan(basePackages = "org.springframework.social.connect")
+@ComponentScan(basePackages = "org.springframework.social.connect.mongo")
 @PropertySource("classpath:spring/application.properties")
 public class ApplicationConfig {
 	
