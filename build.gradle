@@ -6,8 +6,8 @@ description = 'A spring social repository for Mongodb'
 group = 'org.springframework.social'
 version = "1.0.0-SNAPSHOT"
 
-sourceCompatibility=1.5
-targetCompatibility=1.5
+sourceCompatibility=1.6
+targetCompatibility=1.6
 
 repositories {
     mavenCentral()
@@ -20,6 +20,9 @@ def slf4jVersion = "1.6.1"
 
 dependencies {
 	// spring framework
+	compile("org.springframework:spring-core:${springVersion}") {
+		exclude group: "commons-logging", module: "commons-logging"
+	}
 	compile("org.springframework:spring-context:${springVersion}") {
 		exclude group: "commons-logging", module: "commons-logging"
 	}
@@ -60,4 +63,91 @@ dependencies {
 task createDirs(description: 'Creates the directory for the project.', group: 'Project') << {
 	sourceSets*.java.srcDirs*.each { it.mkdirs() }
 	sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
+
+install {
+    repositories.mavenInstaller {
+        customizePom(pom, project)
+    }
+}
+
+def customizePom(pom, gradleProject) {
+    pom.whenConfigured { generatedPom ->
+
+        // add all items necessary for maven central publication
+        generatedPom.project {
+            name = gradleProject.description
+            description = gradleProject.description
+            url = 'https://github.com/SpringSource/spring-social'
+            organization {
+                name = 'SpringSource'
+                url = 'http://springsource.org/spring-social'
+            }
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+//            scm {
+//                url = 'https://github.com/SpringSource/spring-social'
+//                connection = 'scm:git:git://github.com/SpringSource/spring-social'
+//                developerConnection = 'scm:git:git://github.com/SpringSource/spring-social'
+//            }
+            developers {
+                developer {
+                    name = 'Carlo Micieli'
+                }
+            }
+
+			// For ease of CI builds for those using Maven - can copy pom.xml from build folder.
+            build {
+                plugins {
+                    plugin {
+                        groupId = 'org.apache.maven.plugins'
+                        artifactId = 'maven-compiler-plugin'
+                        configuration {
+                            source = '1.6'
+                            target = '1.6'
+                        }
+                    }
+                    plugin {
+                        groupId = 'org.apache.maven.plugins'
+                        artifactId = 'maven-surefire-plugin'
+                        configuration {
+                            includes {
+                                include = '**/*Tests.java'
+                            }
+                            excludes {
+                                exclude = '**/*Abstract*.java'
+                            }
+                        }
+                    }
+                }
+                resources {
+                    resource {
+                        directory = 'src/main/java'
+                        includes = ['**/*']
+                        excludes = ['**/*.java']
+                    }
+                    resource {
+                        directory = 'src/main/resources'
+                        includes = ['**/*']
+                    }
+                }
+                testResources {
+                    testResource {
+                        directory = 'src/test/java'
+                        includes = ['**/*']
+                        excludes = ['**/*.java']
+                    }
+                    testResource {
+                        directory = 'src/test/resources'
+                        includes = ['**/*']
+                    }
+                }
+            }
+        }
+    }
 }
