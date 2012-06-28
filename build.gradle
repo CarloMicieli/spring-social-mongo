@@ -1,8 +1,13 @@
 apply plugin: 'java'
+apply plugin: 'maven'
 apply plugin: 'eclipse'
 
 description = 'A spring social repository for Mongodb'
+group = 'org.springframework.social'
 version = "1.0.0-SNAPSHOT"
+
+sourceCompatibility=1.5
+targetCompatibility=1.5
 
 repositories {
     mavenCentral()
