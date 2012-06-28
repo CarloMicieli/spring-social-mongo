@@ -55,7 +55,7 @@ public class MongoConnection {
 	
 	String secret;
 	String refreshToken;
-	long expireTime;
+	Long expireTime;
 	
 	public ObjectId getId() {
 		return id;
@@ -140,11 +140,11 @@ public class MongoConnection {
 		this.refreshToken = refreshToken;
 	}
 	
-	public long getExpireTime() {
+	public Long getExpireTime() {
 		return expireTime;
 	}
 	
-	public void setExpireTime(long expireTime) {
+	public void setExpireTime(Long expireTime) {
 		this.expireTime = expireTime;
 	}
 }
