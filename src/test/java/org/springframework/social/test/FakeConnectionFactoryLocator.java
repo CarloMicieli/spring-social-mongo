@@ -24,7 +24,7 @@ public class FakeConnectionFactoryLocator implements ConnectionFactoryLocator {
 
 	@Override
 	public ConnectionFactory<?> getConnectionFactory(String providerId) {
-		return new FakeConnectionFactory<>("fake", null, null);
+		return new FakeConnectionFactory<Object>("fake", null, null);
 	}
 
 	@Override
