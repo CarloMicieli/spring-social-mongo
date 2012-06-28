@@ -44,8 +44,8 @@ import static org.springframework.data.mongodb.core.query.Criteria.*;
 @Service
 public class MongoConnectionService implements ConnectionService {
 
-	private MongoTemplate mongoTemplate;
-	private ConnectionConverter converter;
+	private final MongoTemplate mongoTemplate;
+	private final ConnectionConverter converter;
 	
 	@Autowired
 	public MongoConnectionService(MongoTemplate mongoTemplate, ConnectionConverter converter) {
@@ -197,7 +197,7 @@ public class MongoConnectionService implements ConnectionService {
 			throw new IllegalArgumentException("Unable to execute find: no providerUsers provided");
 		}
 		
-		List<Criteria> lc = new ArrayList<>();
+		List<Criteria> lc = new ArrayList<Criteria>();
 		for (Iterator<Entry<String, List<String>>> it = providerUsers.entrySet().iterator(); it.hasNext();) {
 			Entry<String, List<String>> entry = it.next();
 			String providerId = entry.getKey();
@@ -228,7 +228,7 @@ public class MongoConnectionService implements ConnectionService {
 		q.fields().include("userId");
 		
 		List<MongoConnection> results = mongoTemplate.find(q, MongoConnection.class);
-		Set<String> userIds = new HashSet<>();
+		Set<String> userIds = new HashSet<String>();
 		for (MongoConnection mc : results) {
 			userIds.add(mc.getUserId());
 		}
@@ -249,7 +249,7 @@ public class MongoConnectionService implements ConnectionService {
 		q.fields().include("userId");
 		
 		List<MongoConnection> results = mongoTemplate.find(q, MongoConnection.class);
-		List<String> userIds = new ArrayList<>();
+		List<String> userIds = new ArrayList<String>();
 		for (MongoConnection mc : results) {
 			userIds.add(mc.getUserId());
 		}
@@ -261,7 +261,7 @@ public class MongoConnectionService implements ConnectionService {
 	
 	private List<Connection<?>> runQuery(Query query) {
 		List<MongoConnection> results = mongoTemplate.find(query, MongoConnection.class);
-		List<Connection<?>> l = new ArrayList<>();
+		List<Connection<?>> l = new ArrayList<Connection<?>>();
 		for (MongoConnection mc : results) {
 			l.add(converter.convert(mc));
 		}

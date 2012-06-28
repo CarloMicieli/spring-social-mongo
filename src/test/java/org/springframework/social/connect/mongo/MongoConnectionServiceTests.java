@@ -47,8 +47,8 @@ public class MongoConnectionServiceTests extends SpringTest {
 	private @Autowired MongoTemplate mongoOps;
 	private @Autowired MongoConnectionService service;
 	
-	private FakeConnectionFactory<FakeProvider> factory = 
-			new FakeConnectionFactory<>("fake", null, null);
+	private final FakeConnectionFactory<FakeProvider> factory = 
+			new FakeConnectionFactory<FakeProvider>("fake", null, null);
 	
 	private MongoConnection create(String userId, 
 			String providerId, 
@@ -86,7 +86,7 @@ public class MongoConnectionServiceTests extends SpringTest {
 	
 	@Test
 	public void shouldReturnMultipleConnections() {
-		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.put("twitter", Arrays.asList("@JeffreyHyman", "@joey_ramones"));
 		map.put("facebook", Arrays.asList("joey.ramones"));
 		
