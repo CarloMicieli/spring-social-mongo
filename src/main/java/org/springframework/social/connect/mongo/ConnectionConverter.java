@@ -59,7 +59,7 @@ public class ConnectionConverter {
 			decrypt(uc.getAccessToken()),
 			decrypt(uc.getSecret()),
 			decrypt(uc.getRefreshToken()),
-			expireTime(uc.getExpireTime()));
+			uc.getExpireTime());
 	}
 	
 	public MongoConnection convert(Connection<?> cnn) {
@@ -86,9 +86,5 @@ public class ConnectionConverter {
 
 	private String encrypt(String text) {
 		return text != null ? textEncryptor.encrypt(text) : text;
-	}
-
-	private Long expireTime(long expireTime) {
-		return expireTime == 0 ? null : expireTime;
 	}
 }
