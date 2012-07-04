@@ -30,7 +30,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "connections")
 @CompoundIndexes({
-	@CompoundIndex(name = "connections_rank_idx", def = "{'userId': 1, 'providerId': 1, 'rank': 1}", unique = true)
+	@CompoundIndex(name = "connections_rank_idx", def = "{'userId': 1, 'providerId': 1, 'rank': 1}", unique = true),
+	@CompoundIndex(name = "connections_primary_idx", def = "{'userId': 1, 'providerId': 1, 'providerUserId': 1}", unique = true)
 })
 public class MongoConnection {
 	@Id
