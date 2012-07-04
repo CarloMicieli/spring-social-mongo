@@ -25,13 +25,17 @@ import java.util.Map.Entry;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.util.MultiValueMap;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.mongodb.WriteConcern;
 
 import static org.springframework.data.mongodb.core.query.Query.query;
 import static org.springframework.data.mongodb.core.query.Criteria.*;
@@ -93,7 +97,21 @@ public class MongoConnectionService implements ConnectionService {
 	public void update(String userId, Connection<?> userConn) {
 		MongoConnection mongoCnn = converter.convert(userConn);
 		mongoCnn.setUserId(userId);
-		mongoTemplate.save(mongoCnn);
+		try {
+			mongoTemplate.setWriteConcern(WriteConcern.SAFE);
+			mongoTemplate.save(mongoCnn); 
+		} catch (DuplicateKeyException e) {
+			Query q = query(where("userId").is(userId).and("providerId").is(mongoCnn.getProviderId())
+					.and("providerUserId").is(mongoCnn.getProviderUserId()));
+			
+			Update update = Update.update("expireTime", mongoCnn.getExpireTime())
+					.set("accessToken", mongoCnn.getAccessToken())
+					.set("profileUrl", mongoCnn.getProfileUrl())
+					.set("imageUrl", mongoCnn.getImageUrl())
+					.set("displayName", mongoCnn.getDisplayName());
+			
+			mongoTemplate.findAndModify(q, update, MongoConnection.class);
+		}
 	}
 	
 	/**
@@ -198,8 +216,7 @@ public class MongoConnectionService implements ConnectionService {
 		}
 		
 		List<Criteria> lc = new ArrayList<Criteria>();
-		for (Iterator<Entry<String, List<String>>> it = providerUsers.entrySet().iterator(); it.hasNext();) {
-			Entry<String, List<String>> entry = it.next();
+		for (Entry<String, List<String>> entry : providerUsers.entrySet()) {
 			String providerId = entry.getKey();
 			
 			lc.add(where("providerId").is(providerId)
