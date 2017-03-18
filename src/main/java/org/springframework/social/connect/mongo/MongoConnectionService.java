@@ -22,15 +22,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionKey;
 import org.springframework.util.MultiValueMap;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Order;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,8 +64,9 @@ public class MongoConnectionService implements ConnectionService {
 	public int getMaxRank(String userId, String providerId) { 
 		// select coalesce(max(rank) + 1, 1) as rank from UserConnection where userId = ? and providerId = ?
 		Query q = query(where("userId").is(userId).and("providerId").is(providerId));
-		q.sort().on("rank", Order.DESCENDING);
-		MongoConnection cnn = mongoTemplate.findOne(q, MongoConnection.class);
+		//q.sort().on("rank", Order.DESCENDING);
+		Sort sort = new Sort(Sort.Direction.DESC, "rank");
+		MongoConnection cnn = mongoTemplate.findOne(q.with(sort), MongoConnection.class);
 		
 		if (cnn==null)
 			return 1;
@@ -183,9 +182,10 @@ public class MongoConnectionService implements ConnectionService {
 	public List<Connection<?>> getConnections(String userId) {
 		// select where userId = ? order by providerId, rank
 		Query q = query(where("userId").is(userId));
-		q.sort().on("providerId", Order.ASCENDING).on("rank", Order.ASCENDING);
-		
-		return runQuery(q);
+		Sort sort = new Sort(Sort.Direction.ASC, "providerId");
+		Sort sort2 = new Sort(Sort.Direction.ASC, "rank");
+		//q.sort().on("providerId", Order.ASCENDING).on("rank", Order.ASCENDING);
+		return runQuery(q.with(sort).with(sort2));
 	}
 	
 	/**
@@ -197,9 +197,9 @@ public class MongoConnectionService implements ConnectionService {
 	public List<Connection<?>> getConnections(String userId, String providerId) {
 		// where userId = ? and providerId = ? order by rank
 		Query q = new Query(where("userId").is(userId).and("providerId").is(providerId));
-		q.sort().on("rank", Order.ASCENDING);
-		
-		return runQuery(q);
+		Sort sort = new Sort(Sort.Direction.ASC, "rank");
+		//q.sort().on("rank", Order.ASCENDING);
+		return runQuery(q.with(sort));
 	}
 	
 	/**
@@ -227,9 +227,10 @@ public class MongoConnectionService implements ConnectionService {
 		criteria.orOperator(lc.toArray(new Criteria[lc.size()]));
 		
 		Query q = new Query(criteria);
-		q.sort().on("providerId", Order.ASCENDING).on("rank", Order.ASCENDING);
-		
-		return runQuery(q);
+		//q.sort().on("providerId", Order.ASCENDING).on("rank", Order.ASCENDING);
+		Sort sort = new Sort(Sort.Direction.ASC, "providerId");
+		Sort sort2 = new Sort(Sort.Direction.ASC, "rank");
+		return runQuery(q.with(sort).with(sort2));
 	}
 
 	/**
