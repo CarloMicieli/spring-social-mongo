@@ -13,27 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.social.test;
+package uk.ac.ebi.ddi.social.connect.mongo;
 
-import java.util.Set;
-
-import org.springframework.social.connect.ConnectionFactory;
-import org.springframework.social.connect.ConnectionFactoryLocator;
-
-public class FakeConnectionFactoryLocator implements ConnectionFactoryLocator {
-
-	@Override
-	public ConnectionFactory<?> getConnectionFactory(String providerId) {
-		return new FakeConnectionFactory<Object>("fake", null, null);
-	}
-
-	@Override
-	public <A> ConnectionFactory<A> getConnectionFactory(Class<A> apiType) {
-		return null;
-	}
-
-	@Override
-	public Set<String> registeredProviderIds() {
-		return null;
-	}
+/**
+ * A stub for a spring social provider.
+ * 
+ * @author Carlo P. Micieli
+ */
+public class FakeProvider {
 }

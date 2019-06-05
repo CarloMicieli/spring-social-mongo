@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.social.connect.mongo;
+package uk.ac.ebi.ddi.social.connect.mongo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +27,6 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.connect.ConnectionFactoryLocator;
-import org.springframework.social.test.FakeConnectionFactoryLocator;
 
 import com.mongodb.Mongo;
 import com.mongodb.WriteConcern;
@@ -38,7 +37,7 @@ import com.mongodb.WriteConcern;
  * @author Carlo P. Micieli
  */
 @Configuration
-@ComponentScan(basePackages = "org.springframework.social.connect.mongo")
+@ComponentScan(basePackages = "uk.ac.ebi.ddi.social.connect.mongo")
 @PropertySource("classpath:spring/application.properties")
 public class ApplicationConfig {
 	
