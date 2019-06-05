@@ -10,7 +10,7 @@
 
   <groupId>uk.ac.ebi.ddi.social</groupId>
   <artifactId>spring-social-mongo</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>A spring social repository for Mongodb</name>
   <description>A spring social repository for Mongodb</description>
   <url>https://github.com/OmicsDI/spring-social-mongo</url>
