@@ -2,7 +2,14 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.springframework.social</groupId>
+
+  <parent>
+    <groupId>uk.ac.ebi.ddi.maven</groupId>
+    <artifactId>ddi-base-master</artifactId>
+    <version>1.3</version>
+  </parent>
+
+  <groupId>uk.ac.ebi.ddi.social</groupId>
   <artifactId>spring-social-mongo</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <name>A spring social repository for Mongodb</name>

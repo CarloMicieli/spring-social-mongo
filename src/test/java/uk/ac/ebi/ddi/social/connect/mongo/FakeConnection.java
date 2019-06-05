@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.social.test;
+package uk.ac.ebi.ddi.social.connect.mongo;
 
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;

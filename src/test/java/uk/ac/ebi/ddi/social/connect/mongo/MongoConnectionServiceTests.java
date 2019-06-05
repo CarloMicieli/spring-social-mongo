@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.social.connect.mongo;
+package uk.ac.ebi.ddi.social.connect.mongo;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -29,9 +29,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionKey;
-import org.springframework.social.test.FakeConnection;
-import org.springframework.social.test.FakeConnectionFactory;
-import org.springframework.social.test.FakeProvider;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
