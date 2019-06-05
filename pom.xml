@@ -14,18 +14,20 @@
   <version>1.0.0-SNAPSHOT</version>
   <name>A spring social repository for Mongodb</name>
   <description>A spring social repository for Mongodb</description>
-  <url>https://github.com/SpringSource/spring-social</url>
+  <url>https://github.com/OmicsDI/spring-social-mongo</url>
+
   <organization>
     <name>SpringSource</name>
     <url>http://springsource.org/spring-social</url>
   </organization>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+
+  <scm>
+    <connection>scm:git:github.com/OmicsDI/spring-social-mongo.git</connection>
+    <developerConnection>scm:git:git@github.com:OmicsDI/spring-social-mongo.git</developerConnection>
+    <url>https://github.com/OmicsDI/spring-social-mongo.git</url>
+    <tag>spring-social-mongo-1.0.0</tag>
+  </scm>
+
   <developers>
     <developer>
       <name>Carlo Micieli</name>
